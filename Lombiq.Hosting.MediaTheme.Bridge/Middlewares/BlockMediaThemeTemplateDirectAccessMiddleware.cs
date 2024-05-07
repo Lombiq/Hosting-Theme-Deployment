@@ -1,6 +1,7 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using OrchardCore.Media;
 using OrchardCore.Routing;
 using System;
@@ -37,8 +38,8 @@ public class BlockMediaThemeTemplateDirectAccessMiddleware
             return;
         }
 
-        context.Response.StatusCode = 404;
-        context.Response.Headers.Append("Content-Length", "0");
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        context.Response.Headers.Append(HeaderNames.ContentLength, "0");
         await context.Response.Body.FlushAsync(context.RequestAborted);
         context.Abort();
     }
