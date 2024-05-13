@@ -24,7 +24,7 @@ public static class TestCaseUITestContextExtensions
         await context.GoToMediaThemeTestContentPageAsync();
         var mediaOptions = await context.GetTenantOptionsAsync<MediaOptions>();
 
-        // Instead of going to the page directly (which will fail) we'll check the response status code.
+        // Instead of going to the page directly (which will fail) we'll check the response status code directly.
         var templatesPageUri = context.GetAbsoluteUri(
             $"{mediaOptions.Value.AssetsRequestPath}/{Paths.MediaThemeTemplatesWebPath}/Example.liquid");
         using var handler = new HttpClientHandler();
