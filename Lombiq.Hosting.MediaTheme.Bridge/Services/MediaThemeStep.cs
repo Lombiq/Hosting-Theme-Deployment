@@ -4,6 +4,7 @@ using OrchardCore.Media;
 using OrchardCore.Recipes.Models;
 using OrchardCore.Recipes.Services;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
@@ -28,7 +29,7 @@ public class MediaThemeStep : IRecipeStepHandler
             return;
         }
 
-        var model = context.Step.ToObject<MediaThemeStepModel>();
+        var model = context.Step.Deserialize<MediaThemeStepModel>();
 
         await _mediaThemeManager.UpdateBaseThemeAsync(model.BaseThemeId);
 
