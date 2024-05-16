@@ -6,10 +6,10 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Title>Lombiq Hosting - Media Theme for Orchard Core - UI Test Extensions</Title>
+        <Title>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions</Title>
         <Authors>Lombiq Technologies</Authors>
         <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
-        <Description>Lombiq Hosting - Media Theme for Orchard Core - UI Test Extensions: Extensions to aid in UI testing Lombiq Hosting - Media Theme for Orchard Core. See the project website for detailed documentation.</Description>
+        <Description>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions: Extensions to aid in UI bridge testing Lombiq Hosting - Media Theme for Orchard Core. See the project website for detailed documentation.</Description>
         <PackageIcon>NuGetIcon.png</PackageIcon>
         <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Theme</PackageTags>
         <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
@@ -29,6 +29,11 @@
 
     <ItemGroup Condition="'$(NuGetBuild)' == 'true'">
         <PackageReference Include="Lombiq.Tests.UI" Version="9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Bridge\Lombiq.Hosting.MediaTheme.Bridge.csproj" />
+        <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Tests.UI\Lombiq.Hosting.MediaTheme.Tests.UI.csproj" />
     </ItemGroup>
 
 </Project>
