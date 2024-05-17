@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Tests.UI.Extensions;
 
-public static class TestCaseUIBridgeTestContextExtensions
+public static class TestCaseUITestContextExtensions
 {
     [SuppressMessage(
         "Security",
