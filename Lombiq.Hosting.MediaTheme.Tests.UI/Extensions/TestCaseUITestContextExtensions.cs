@@ -8,14 +8,22 @@ namespace Lombiq.Hosting.MediaTheme.Tests.UI.Extensions;
 
 public static class TestCaseUITestContextExtensions
 {
-    public static async Task TestMediaThemeDeployedBehaviorAsync(this UITestContext context, string tenantPrefix = null)
+    // Separate shortcut method is used instead of a default value to avoid error CP0002.
+    public static Task TestMediaThemeDeployedBehaviorAsync(this UITestContext context) =>
+        context.TestMediaThemeDeployedBehaviorAsync(tenantPrefix: null);
+
+    public static async Task TestMediaThemeDeployedBehaviorAsync(this UITestContext context, string tenantPrefix)
     {
         await context.ExecuteMediaThemeSampleRecipeDirectlyAsync();
         await context.GoToMediaThemeTestContentPageAsync();
         AssertElements(context, "v", tenantPrefix);
     }
 
-    public static async Task TestMediaThemeLocalBehaviorAsync(this UITestContext context, string tenantPrefix = null)
+    // Separate shortcut method is used instead of a default value to avoid error CP0002.
+    public static Task TestMediaThemeLocalBehaviorAsync(this UITestContext context) =>
+        context.TestMediaThemeLocalBehaviorAsync(tenantPrefix: null);
+
+    public static async Task TestMediaThemeLocalBehaviorAsync(this UITestContext context, string tenantPrefix)
     {
         await context.SetThemeDirectlyAsync("Lombiq.Hosting.MediaTheme.Tests.Theme");
         await context.GoToHomePageAsync(onlyIfNotAlreadyThere: false);
