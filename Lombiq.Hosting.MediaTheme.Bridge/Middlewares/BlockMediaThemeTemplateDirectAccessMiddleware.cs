@@ -41,6 +41,7 @@ public class BlockMediaThemeTemplateDirectAccessMiddleware
         context.Response.StatusCode = StatusCodes.Status404NotFound;
         context.Response.Headers.Append(HeaderNames.ContentLength, "0");
         await context.Response.Body.FlushAsync(context.RequestAborted);
-        context.Abort();
+        // Use Complete instead of Abort which actually causes a 502 Bad Gateway response.
+        await context.Response.CompleteAsync();
     }
 }
