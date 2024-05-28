@@ -7,5 +7,5 @@ using OrchardCore.Modules.Manifest;
     Version = "0.0.1",
     Description = "Provides the processing logic for the Media Theme.",
     Category = "Hosting",
-    Dependencies = new[] { "OrchardCore.Deployment", "OrchardCore.Media" }
+    Dependencies = ["OrchardCore.Deployment", "OrchardCore.Media"]
 )]

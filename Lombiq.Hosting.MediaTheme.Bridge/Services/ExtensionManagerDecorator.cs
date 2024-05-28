@@ -59,7 +59,7 @@ public class ExtensionManagerDecorator : IExtensionManager
         if (featureIdsToLoad.Contains(FeatureNames.MediaTheme))
         {
             var baseThemeId = GetBaseThemeId();
-            if (!string.IsNullOrEmpty(baseThemeId)) featureIdsToLoad = featureIdsToLoad.Append(baseThemeId).ToArray();
+            if (!string.IsNullOrEmpty(baseThemeId)) featureIdsToLoad = [.. featureIdsToLoad, baseThemeId];
         }
 
         return _decorated.GetFeatures(featureIdsToLoad);

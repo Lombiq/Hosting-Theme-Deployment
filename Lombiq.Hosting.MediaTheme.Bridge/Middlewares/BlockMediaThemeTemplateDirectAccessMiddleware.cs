@@ -38,8 +38,9 @@ public class BlockMediaThemeTemplateDirectAccessMiddleware
         }
 
         context.Response.StatusCode = 404;
-        context.Response.Headers.Add("Content-Length", "0");
+        context.Response.Headers.Append("Content-Length", "0");
         await context.Response.Body.FlushAsync(context.RequestAborted);
-        context.Abort();
+        // Use Complete instead of Abort which actually causes a 502 Bad Gateway response.
+        await context.Response.CompleteAsync();
     }
 }

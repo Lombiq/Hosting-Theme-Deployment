@@ -37,7 +37,7 @@
 
     <div class="mb-3">
         <div class="mb-3" asp-validation-class-for="BaseThemeId">
-            <label asp-for="BaseThemeId">@T["Base Theme"]</label>
+            <label class="form-label" asp-for="BaseThemeId">@T["Base Theme"]</label>
             <select asp-for="BaseThemeId" asp-items="availableThemesSelectList" class="form-control"></select>
             <span asp-validation-for="BaseThemeId"></span>
             <div class="hint">@T["By updating the base theme the shape table cache will be invalidated."]</div>
