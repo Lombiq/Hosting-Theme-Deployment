@@ -43,6 +43,12 @@ internal sealed class MediaThemeAssetUrlRewritingMiddleware
         if (!context.IsDevelopment() || await mediaFileStore.FileExistsAsync(mediaPath))
         {
             assetUrl = RequestUrlPrefixRemover.RemoveIfHasPrefix(mediaFileStore.MapPathToPublicUrl(mediaPath), shellSettings);
+
+            if (!string.IsNullOrEmpty(shellSettings.RequestUrlPrefix) &&
+                assetUrl.StartsWith("/" + shellSettings.RequestUrlPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                assetUrl = assetUrl[(shellSettings.RequestUrlPrefix.Length + 1)..];
+            }
         }
         else
         {
