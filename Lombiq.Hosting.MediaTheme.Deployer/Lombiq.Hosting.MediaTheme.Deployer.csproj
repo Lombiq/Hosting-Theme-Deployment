@@ -9,7 +9,7 @@
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Deployer</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme</PackageProjectUrl>
-    <PackageLicenseFile>License.md</PackageLicenseFile>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -30,7 +30,6 @@
   <ItemGroup>
     <None Include="..\.github\actions\deploy-media-theme\action.yml" Link=".github\action.yml" />
     <None Include="..\.github\workflows\deploy-media-theme.yml" Link=".github\deploy-media-theme.yml" />
-    <None Include="License.md" Pack="true" PackagePath="" />
     <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
