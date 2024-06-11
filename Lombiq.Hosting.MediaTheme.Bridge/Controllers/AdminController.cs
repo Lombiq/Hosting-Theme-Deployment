@@ -66,6 +66,8 @@ public class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> IndexPost(MediaThemeSettingsViewModel viewModel)
     {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
         if (!await IsAuthorizedToManageMediaThemeAsync()) return NotFound();
 
         var state = await _mediaThemeStateStore.LoadMediaThemeStateAsync();
