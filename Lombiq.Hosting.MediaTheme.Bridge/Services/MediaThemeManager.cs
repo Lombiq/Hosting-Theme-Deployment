@@ -46,7 +46,7 @@ public class MediaThemeManager : IMediaThemeManager
             var baseThemeFeature = (await _shellFeaturesManager.GetAvailableFeaturesAsync())
                 .FirstOrDefault(feature => feature.IsTheme() && feature.Id == baseThemeId)
                 ?? throw new ArgumentException($"Theme with the given ID ({baseThemeId}) doesn't exist.", nameof(baseThemeId));
-            await _shellFeaturesManager.EnableFeaturesAsync(new[] { baseThemeFeature }, force: true);
+            await _shellFeaturesManager.EnableFeaturesAsync([baseThemeFeature], force: true);
         }
 
         var state = await _mediaThemeStateStore.LoadMediaThemeStateAsync();

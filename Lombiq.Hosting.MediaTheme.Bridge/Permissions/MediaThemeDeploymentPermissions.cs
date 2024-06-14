@@ -19,12 +19,11 @@ public class MediaThemeDeploymentPermissions : IPermissionProvider
         .AsEnumerable());
 
     public IEnumerable<PermissionStereotype> GetDefaultStereotypes() =>
-        new[]
-        {
+        [
             new PermissionStereotype
             {
                 Name = "Administrator",
-                Permissions = new[] { ManageMediaTheme },
+                Permissions = [ManageMediaTheme],
             },
-        };
+        ];
 }
