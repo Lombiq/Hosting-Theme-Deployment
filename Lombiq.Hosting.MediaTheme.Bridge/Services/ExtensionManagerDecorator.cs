@@ -48,9 +48,6 @@ public sealed class ExtensionManagerDecorator : IExtensionManager
     public IEnumerable<IExtensionInfo> GetExtensions() =>
         _decorated.GetExtensions();
 
-    public IEnumerable<Type> GetExportedExtensionTypes(IExtensionInfo extensionInfo) =>
-        _decorated.GetExportedExtensionTypes(extensionInfo);
-
     public Task<ExtensionEntry> LoadExtensionAsync(IExtensionInfo extensionInfo) =>
         _decorated.LoadExtensionAsync(extensionInfo);
 
