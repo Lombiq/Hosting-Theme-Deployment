@@ -9,7 +9,7 @@
   </Target>
 
   <Target Name="RestoreDotnetTool" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Exec Command="dotnet tool restore"/>
+    <Exec Command="dotnet tool restore --no-cache"/>
   </Target>
 
   <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
