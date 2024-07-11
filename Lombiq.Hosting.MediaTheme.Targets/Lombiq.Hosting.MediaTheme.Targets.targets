@@ -9,7 +9,7 @@
   </Target>
 
   <Target Name="RestoreDotnetTool" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Exec Command="dotnet tool restore"/>
+    <Exec Command="dotnet tool restore --disable-parallel"/>
   </Target>
 
   <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
