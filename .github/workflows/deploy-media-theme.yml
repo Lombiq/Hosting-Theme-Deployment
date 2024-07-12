@@ -21,7 +21,7 @@ on:
       theme-path:
         required: false
         type: string
-        default: "."
+        default: .
         description: Path to the theme project.
       base-theme-id:
         required: false
@@ -30,7 +30,7 @@ on:
       clear-media-folder:
         required: false
         type: string
-        default: "true"
+        default: 'true'
         description: When set to "true", will clear the Media folder of the Media Theme before deployment.
 
 jobs:
@@ -38,18 +38,18 @@ jobs:
     name: Deploy Media Theme
     runs-on: ubuntu-22.04
     steps:
-    - name: Checkout
-      uses: Lombiq/GitHub-Actions/.github/actions/checkout@dev
-      with:
-        token: ${{ secrets.CHECKOUT_TOKEN }}
+      - name: Checkout
+        uses: Lombiq/GitHub-Actions/.github/actions/checkout@dev
+        with:
+          token: ${{ secrets.CHECKOUT_TOKEN }}
 
-    - name: Deploy Media Theme
-      uses: Lombiq/Hosting-Media-Theme/.github/actions/deploy-media-theme@dev
-      env:
-        URL: ${{ secrets.URL }}
-        CLIENT_NAME: ${{ secrets.CLIENT_NAME }}
-        CLIENT_API_KEY: ${{ secrets.CLIENT_API_KEY }}
-      with:
-        theme-path: ${{ inputs.theme-path }}
-        base-theme-id: ${{ inputs.base-theme-id }}
-        clear-media-folder: ${{ inputs.clear-media-folder }}
+      - name: Deploy Media Theme
+        uses: Lombiq/Hosting-Media-Theme/.github/actions/deploy-media-theme@dev
+        env:
+          URL: ${{ secrets.URL }}
+          CLIENT_NAME: ${{ secrets.CLIENT_NAME }}
+          CLIENT_API_KEY: ${{ secrets.CLIENT_API_KEY }}
+        with:
+          theme-path: ${{ inputs.theme-path }}
+          base-theme-id: ${{ inputs.base-theme-id }}
+          clear-media-folder: ${{ inputs.clear-media-folder }}
