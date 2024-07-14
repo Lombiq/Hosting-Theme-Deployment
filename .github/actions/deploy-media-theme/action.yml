@@ -4,18 +4,18 @@ description: Deploys an Orchard Core Media Theme to an Orchard site via Remote D
 inputs:
   theme-path:
     required: false
-    default: "."
+    default: .
     description: Path to the theme project.
   base-theme-id:
     required: false
     description: ID of the base theme of the theme project, if any.
   clear-media-folder:
     required: false
-    default: "true"
+    default: 'true'
     description: When set to "true", will clear the Media folder of the Media Theme before deployment.
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Install Lombiq.Hosting.MediaTheme.Deployer
       shell: pwsh
