@@ -16,6 +16,7 @@
     AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <Action ParameterType="System.String" Required="true" />
+      <TaskObjectKey ParameterType="System.String" Required="true" />
     </ParameterGroup>
     <Task>
       <Using Namespace="System" />
@@ -35,12 +36,12 @@
               }
 
               BuildEngine4.RegisterTaskObject(
-                  MutexName,
+                  TaskObjectKey,
                   mutex,
                   RegisteredTaskObjectLifetime.Build,
                   allowEarlyCollection: false);
           }
-          else if (Action == "Release" && BuildEngine4.GetRegisteredTaskObject(MutexName, RegisteredTaskObjectLifetime.Build) is Mutex mutex)
+          else if (Action == "Release" && BuildEngine4.GetRegisteredTaskObject(TaskObjectKey, RegisteredTaskObjectLifetime.Build) is Mutex mutex)
           {
               mutex.ReleaseMutex();
               mutex.Dispose();
@@ -50,10 +51,14 @@
     </Task>
   </UsingTask>
 
+  <PropertyGroup>
+    <TaskObjectKey>$(MSBuildProjectFullPath).RestoreDotnetTool</TaskObjectKey>
+  </PropertyGroup>
+
   <Target Name="RestoreDotnetTool" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <MutexTask Action="Acquire" />
+    <MutexTask Action="Acquire" TaskObjectKey="$(TaskObjectKey)" />
     <Exec Command="dotnet tool restore" />
-    <MutexTask Action="Release" />
+    <MutexTask Action="Release" TaskObjectKey="$(TaskObjectKey)" />
   </Target>
 
   <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
