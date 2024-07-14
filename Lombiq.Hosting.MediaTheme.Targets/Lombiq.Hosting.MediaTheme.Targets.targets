@@ -22,7 +22,7 @@
       <Using Namespace="System.Threading" />
       <Code Type="Fragment" Language="cs">
         <![CDATA[
-          const string MutexName = "Lombiq.Hosting.MediaTheme.Targets/DotnetToolRestore";
+          const string MutexName = "Global\\Lombiq.Hosting.MediaTheme.Targets";
 
           if (Action == "Acquire")
           {
