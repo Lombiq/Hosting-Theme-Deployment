@@ -8,8 +8,57 @@
            Text="A dotnet-tools.json file should exists, read the documentation for more information." />
   </Target>
 
+  <!-- The mutex is necessary to prevent concurrent dotnet tool restore calls throwing "The process cannot access the
+  file" IOExceptions due to them trying to write the same NuGet cache file simultaneously. -->
+  <UsingTask
+    TaskName="MutexTask"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Action ParameterType="System.String" Required="true" />
+      <TaskObjectKey ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Threading" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          const string MutexName = "Global\\Lombiq.Hosting.MediaTheme.Targets";
+
+          if (Action == "Acquire")
+          {
+              var mutex = new Mutex(initiallyOwned: false, MutexName);
+              var acquired = mutex.WaitOne(TimeSpan.FromMinutes(3));
+
+              if (!acquired)
+              {
+                  throw new InvalidOperationException($"Failed to acquire mutex '{MutexName}' within the specified timeout.");
+              }
+
+              BuildEngine4.RegisterTaskObject(
+                  TaskObjectKey,
+                  mutex,
+                  RegisteredTaskObjectLifetime.Build,
+                  allowEarlyCollection: false);
+          }
+          else if (Action == "Release" && BuildEngine4.GetRegisteredTaskObject(TaskObjectKey, RegisteredTaskObjectLifetime.Build) is Mutex mutex)
+          {
+              mutex.ReleaseMutex();
+              mutex.Dispose();
+          }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <PropertyGroup>
+    <TaskObjectKey>$(MSBuildProjectFullPath).RestoreDotnetTool</TaskObjectKey>
+  </PropertyGroup>
+
   <Target Name="RestoreDotnetTool" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Exec Command="dotnet tool restore"/>
+    <MutexTask Action="Acquire" TaskObjectKey="$(TaskObjectKey)" />
+    <Exec Command="dotnet tool restore" />
+    <MutexTask Action="Release" TaskObjectKey="$(TaskObjectKey)" />
   </Target>
 
   <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
