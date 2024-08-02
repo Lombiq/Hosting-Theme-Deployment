@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.Deployment;
 using OrchardCore.DisplayManagement;
-using OrchardCore.DisplayManagement.Handlers;
 using OrchardCore.Environment.Extensions;
 using OrchardCore.Modules;
 using OrchardCore.Navigation;
@@ -35,9 +34,7 @@ public class Startup : StartupBase
         services.AddScoped<IShapeBindingResolver, MediaTemplatesShapeBindingResolver>();
         services.AddScoped<IMediaThemeManager, MediaThemeManager>();
         services.AddRecipeExecutionStep<MediaThemeStep>();
-        services.AddTransient<IDeploymentSource, MediaThemeDeploymentSource>();
-        services.AddSingleton<IDeploymentStepFactory>(new DeploymentStepFactory<MediaThemeDeploymentStep>());
-        services.AddScoped<IDisplayDriver<DeploymentStep>, MediaThemeDeploymentStepDriver>();
+        services.AddDeployment<MediaThemeDeploymentSource, MediaThemeDeploymentStep, MediaThemeDeploymentStepDriver>();
         services.AddScoped<IAuthorizationHandler, ManageMediaThemeFolderAuthorizationHandler>();
         services.AddScoped<IMediaThemeCachingService, MediaThemeCachingService>();
         services.AddOrchardServices();
