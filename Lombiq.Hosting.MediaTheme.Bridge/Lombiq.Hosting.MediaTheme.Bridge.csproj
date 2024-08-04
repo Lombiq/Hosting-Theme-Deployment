@@ -44,4 +44,8 @@
     <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="10.0.1-alpha.2.occ-245" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Modules\Lombiq.HelpfulExtensions\Lombiq.HelpfulExtensions\Lombiq.HelpfulExtensions.csproj" />
+  </ItemGroup>
+
 </Project>
