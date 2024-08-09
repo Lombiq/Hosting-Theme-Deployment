@@ -27,12 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="2.0.0-preview-18296" />
-    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="2.0.0-preview-18296" />
-    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="2.0.0-preview-18296" />
-    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="2.0.0-preview-18296" />
-    <PackageReference Include="OrchardCore.Media" Version="2.0.0-preview-18296" />
-    <PackageReference Include="OrchardCore.Module.Targets" Version="2.0.0-preview-18296" />
+    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="2.0.0-preview-18300" />
+    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="2.0.0-preview-18300" />
+    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="2.0.0-preview-18300" />
+    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="2.0.0-preview-18300" />
+    <PackageReference Include="OrchardCore.Media" Version="2.0.0-preview-18300" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.0.0-preview-18300" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 
@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(NuGetBuild)' == 'true'">
-    <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="10.0.1-alpha.2.occ-245" />
+    <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="10.0.1-alpha.4.osoe-893" />
   </ItemGroup>
 
 </Project>
