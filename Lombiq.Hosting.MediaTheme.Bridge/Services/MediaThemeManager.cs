@@ -17,6 +17,8 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
 public class MediaThemeManager : IMediaThemeManager
 {
+    private const string LiquidExtension = ".liquid";
+
     private readonly IMediaThemeStateStore _mediaThemeStateStore;
     private readonly IShellFeaturesManager _shellFeaturesManager;
     private readonly IMemoryCache _memoryCache;
@@ -77,11 +79,20 @@ public class MediaThemeManager : IMediaThemeManager
 
     public async Task<MediaTemplate> GetMediaTemplateByShapeTypeAsync(string shapeType)
     {
-        var templatePath = _mediaFileStore.Combine(
-            Paths.MediaThemeRootFolder,
-            Paths.MediaThemeTemplatesFolder,
-            shapeType + ".liquid");
-        if (!await _mediaFileStore.FileExistsAsync(templatePath)) return null;
+        var templatePath = GetPath(shapeType + LiquidExtension);
+
+        // Check if the file exists with a different casing, before giving up.
+        if (!await _mediaFileStore.FileExistsAsync(templatePath))
+        {
+            var basePath = GetPath();
+            var file = await _mediaFileStore
+                .GetDirectoryContentAsync(basePath)
+                .Where(file => file.Name.EqualsOrdinalIgnoreCase(shapeType + LiquidExtension))
+                .FirstOrDefaultAsync();
+
+            if (file == null) return null;
+            templatePath = GetPath(file.Name);
+        }
 
         await using var templateFileStream = await _mediaFileStore.GetFileStreamAsync(templatePath);
         using var reader = new StreamReader(templateFileStream);
@@ -94,6 +105,11 @@ public class MediaThemeManager : IMediaThemeManager
             Content = content,
         };
     }
+
+    private string GetPath(string shapeType = null) =>
+        shapeType == null
+            ? _mediaFileStore.Combine(Paths.MediaThemeRootFolder, Paths.MediaThemeTemplatesFolder)
+            : _mediaFileStore.Combine(Paths.MediaThemeRootFolder, Paths.MediaThemeTemplatesFolder, shapeType);
 
     private static void ThrowIfBaseThemeIdIsInvalid(string baseThemeId)
     {
