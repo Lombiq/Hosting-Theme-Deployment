@@ -34,9 +34,9 @@ public class MediaTemplatesShapeBindingResolver : IShapeBindingResolver
             return null;
         }
 
-        return await _mediaThemeCachingService.GetMemoryCachedMediaTemplateAsync(shapeType) is not { } mediaTemplate
-            ? null
-            : BuildShapeBinding(shapeType, mediaTemplate.Content);
+        return await _mediaThemeCachingService.GetMemoryCachedMediaTemplateAsync(shapeType) is { } mediaTemplate
+            ? BuildShapeBinding(shapeType, mediaTemplate.Content)
+            : null;
     }
 
     private ShapeBinding BuildShapeBinding(string shapeType, string text) =>
