@@ -1,6 +1,8 @@
+using Lombiq.HelpfulLibraries.Common.Utilities;
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using OrchardCore.FileStorage;
 using OrchardCore.Media;
@@ -24,6 +26,7 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
     private readonly IFileVersionProvider _decorated;
     private readonly IMediaFileStore _mediaFileStore;
     private readonly IOptions<MediaOptions> _mediaOption;
+    private readonly NonSecurityRandomizer _randomizer = new();
 
     public FileVersionProviderDecorator(
         IFileVersionProvider decorated,
@@ -57,6 +60,12 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
         // accessed with some other cache busting parameter. So, before the actual cache busting parameter can be added,
         // we need to add a random parameter.
         var cacheBustedPath = _decorated.AddFileVersionToPath(requestPathBase, path.Replace(Routes.MediaThemeAssets, assetsSubPath));
+
+        // This check could be more sophisticated with UriBuilder, but let's keep it simple, since it'll run frequently.
+        if (!cacheBustedPath.Contains("?v="))
+        {
+            return QueryHelpers.AddQueryString(path, "mediatheme", _randomizer.Get().ToTechnicalString());
+        }
 
         return cacheBustedPath.Replace(assetsSubPath, Routes.MediaThemeAssets);
     }
