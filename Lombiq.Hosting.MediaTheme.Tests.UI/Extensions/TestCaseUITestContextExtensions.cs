@@ -27,7 +27,7 @@ public static class TestCaseUITestContextExtensions
     {
         await context.SetThemeDirectlyAsync("Lombiq.Hosting.MediaTheme.Tests.Theme");
         await context.GoToHomePageAsync(onlyIfNotAlreadyThere: false);
-        AssertElements(context, "mediatheme", tenantPrefix);
+        AssertElements(context, "v", tenantPrefix);
     }
 
     private static void AssertElements(UITestContext context, string cacheBustingParameterName, string tenantPrefix)
