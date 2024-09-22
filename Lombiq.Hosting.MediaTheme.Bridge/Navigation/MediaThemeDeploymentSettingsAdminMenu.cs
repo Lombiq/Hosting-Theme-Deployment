@@ -13,9 +13,9 @@ public class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
 
     public MediaThemeDeploymentSettingsAdminMenu(IStringLocalizer<MediaThemeDeploymentSettingsAdminMenu> stringLocalizer) => T = stringLocalizer;
 
-    public Task BuildNavigationAsync(string name, NavigationBuilder builder)
+    public ValueTask BuildNavigationAsync(string name, NavigationBuilder builder)
     {
-        if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase)) return Task.CompletedTask;
+        if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase)) return ValueTask.CompletedTask;
 
         builder
             .Add(T["Configuration"], configuration => configuration
@@ -25,6 +25,6 @@ public class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
                     .Permission(ManageMediaTheme)
                     .LocalNav()));
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 }
