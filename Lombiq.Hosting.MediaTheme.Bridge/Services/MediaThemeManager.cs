@@ -81,8 +81,7 @@ public class MediaThemeManager : IMediaThemeManager
     {
         var templatePath = GetPath(shapeType + LiquidExtension);
 
-        // Check if the file exists with a different casing, before giving up. Re-evaluate if this is still needed after
-        // https://github.com/OrchardCMS/OrchardCore/issues/16585 is resolved.
+        // Check if the file exists with a different casing, before giving up.
         if (!await _mediaFileStore.FileExistsAsync(templatePath))
         {
             var basePath = GetPath();
