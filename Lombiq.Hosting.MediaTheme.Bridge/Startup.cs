@@ -28,7 +28,7 @@ public class Startup : StartupBase
     public override void ConfigureServices(IServiceCollection services)
     {
         services.AddScoped<IPermissionProvider, MediaThemeDeploymentPermissions>();
-        services.AddScoped<INavigationProvider, MediaThemeDeploymentSettingsAdminMenu>();
+        services.AddNavigationProvider<MediaThemeDeploymentSettingsAdminMenu>();
         services.AddSingleton<IMediaThemeStateStore, MediaThemeStateStore>();
         services.Decorate<IExtensionManager, ExtensionManagerDecorator>();
         services.AddScoped<IShapeBindingResolver, MediaTemplatesShapeBindingResolver>();
