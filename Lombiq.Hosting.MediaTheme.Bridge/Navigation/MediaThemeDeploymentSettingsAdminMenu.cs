@@ -7,7 +7,7 @@ using static Lombiq.Hosting.MediaTheme.Bridge.Permissions.MediaThemeDeploymentPe
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Navigation;
 
-public class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
+public sealed class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
 {
     private readonly IStringLocalizer T;
 

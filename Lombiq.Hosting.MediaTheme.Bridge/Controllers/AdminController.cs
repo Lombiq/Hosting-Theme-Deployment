@@ -15,7 +15,7 @@ using static Lombiq.Hosting.MediaTheme.Bridge.Permissions.MediaThemeDeploymentPe
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Controllers;
 
-public class AdminController : Controller
+public sealed class AdminController : Controller
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly IMediaThemeStateStore _mediaThemeStateStore;

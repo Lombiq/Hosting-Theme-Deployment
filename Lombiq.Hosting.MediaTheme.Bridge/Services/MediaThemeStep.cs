@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public class MediaThemeStep : IRecipeStepHandler
+public sealed class MediaThemeStep : IRecipeStepHandler
 {
     private readonly IMediaFileStore _mediaFileStore;
     private readonly IMediaThemeManager _mediaThemeManager;

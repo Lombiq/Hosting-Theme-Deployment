@@ -8,7 +8,7 @@ using static Lombiq.HelpfulLibraries.OrchardCore.Contents.CommonLocationNames;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Deployment;
 
-public class MediaThemeDeploymentStepDriver : DisplayDriver<DeploymentStep, MediaThemeDeploymentStep>
+public sealed class MediaThemeDeploymentStepDriver : DisplayDriver<DeploymentStep, MediaThemeDeploymentStep>
 {
     public override IDisplayResult Display(MediaThemeDeploymentStep model, BuildDisplayContext context) =>
         Combine(
