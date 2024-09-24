@@ -27,7 +27,7 @@ public sealed class Startup : StartupBase
 
     public override void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<IPermissionProvider, MediaThemeDeploymentPermissions>();
+        services.AddPermissionProvider<MediaThemeDeploymentPermissions>();
         services.AddNavigationProvider<MediaThemeDeploymentSettingsAdminMenu>();
         services.AddSingleton<IMediaThemeStateStore, MediaThemeStateStore>();
         services.Decorate<IExtensionManager, ExtensionManagerDecorator>();
