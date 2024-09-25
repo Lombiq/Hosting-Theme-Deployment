@@ -1,8 +1,8 @@
 using CommandLine;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.IO.Compression;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using static Lombiq.Hosting.MediaTheme.Deployer.Constants.PathConstants;
 using static System.Console;
@@ -68,6 +68,8 @@ public class CommandLineOptions
 
 internal static partial class Program
 {
+    private static readonly JsonSerializerOptions _indentedJsonSerializerOptions = new() { WriteIndented = true };
+
     internal static readonly string[] FeaturesToEnable = ["Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme"];
 
     public static Task Main(string[] args) =>
@@ -104,6 +106,19 @@ internal static partial class Program
         }
     }
 
+    private static void AddFile(JsonArray files, string rootPath, string filePath)
+    {
+        // These need to use forward slashes on every platform due to Orchard's import logic.
+        var importPath = Path.Combine(rootPath, filePath).Replace('\\', '/');
+        var template = new
+        {
+            SourcePath = importPath,
+            TargetPath = importPath,
+        };
+
+        files.Add(template);
+    }
+
     private static async Task RunOptionsInnerAsync(CommandLineOptions options)
     {
         // Creating directory for the deployment.
@@ -130,22 +145,22 @@ internal static partial class Program
             throw new ArgumentException("The theme's path must be provided.");
         }
 
-        var recipeSteps = new JArray();
+        var recipeSteps = new JsonArray();
 
         // Creating Feature step to enable the Media Theme theme and Bridge module.
-        var featureStep = JObject.FromObject(new
+        var featureStep = new
         {
             name = "Feature",
             enable = FeaturesToEnable,
-        });
+        };
         recipeSteps.Add(featureStep);
 
         // Creating Themes step to set Media Theme as the site theme.
-        var themesStep = JObject.FromObject(new
+        var themesStep = new
         {
             name = "Themes",
             Site = "Lombiq.Hosting.MediaTheme",
-        });
+        };
         recipeSteps.Add(themesStep);
 
         var baseThemeId = string.IsNullOrEmpty(options.BaseThemeId) ? null : options.BaseThemeId;
@@ -163,29 +178,16 @@ internal static partial class Program
         }
 
         // Creating Media Theme step.
-        var mediaThemeStep = JObject.FromObject(new
+        var mediaThemeStep = new
         {
             name = "mediatheme",
             ClearMediaThemeFolder = options.ClearMediaHostingFolder,
             BaseThemeId = baseThemeId,
-        });
+        };
         recipeSteps.Add(mediaThemeStep);
 
         // Creating media step.
-        var files = new JArray();
-
-        void AddFile(string rootPath, string filePath)
-        {
-            // These need to use forward slashes on every platform due to Orchard's import logic.
-            var importPath = Path.Combine(rootPath, filePath).Replace('\\', '/');
-            var templateJObject = JObject.FromObject(new
-            {
-                SourcePath = importPath,
-                TargetPath = importPath,
-            });
-
-            files.Add(templateJObject);
-        }
+        var files = new JsonArray();
 
         // Getting assets.
         var assetsPath = Path.Combine(themePath, LocalThemeWwwRootDirectory);
@@ -195,7 +197,7 @@ internal static partial class Program
 
             foreach (var assetPath in allAssetsPaths)
             {
-                AddFile(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
+                AddFile(files, MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
             }
 
             // Copying assets to deployment directory.
@@ -214,7 +216,7 @@ internal static partial class Program
 
             foreach (var templatePath in allTemplatesPaths)
             {
-                AddFile(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
+                AddFile(files, MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
             }
 
             // Copying templates to deployment directory.
@@ -225,14 +227,14 @@ internal static partial class Program
                 recursive: false);
         }
 
-        var mediaStep = JObject.FromObject(new
+        var mediaStep = new
         {
             name = "media",
             Files = files,
-        });
+        };
         recipeSteps.Add(mediaStep);
 
-        CreateRecipeAndWriteIt(options, recipeSteps, newDirectoryPath);
+        await CreateRecipeAndWriteItAsync(options, recipeSteps, newDirectoryPath);
 
         // Zipping the directory.
         var zipFilePath = newDirectoryPath + ".zip";
@@ -320,10 +322,10 @@ internal static partial class Program
               + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
     }
 
-    private static void CreateRecipeAndWriteIt(CommandLineOptions options, JArray steps, string newDirectoryPath)
+    private static Task CreateRecipeAndWriteItAsync(CommandLineOptions options, JsonArray steps, string newDirectoryPath)
     {
         // Creating the recipe itself.
-        var recipe = JObject.FromObject(new
+        var recipe = new
         {
             name = options.DeploymentFileName ?? "MediaTheme",
             displayName = "Media Theme",
@@ -332,17 +334,15 @@ internal static partial class Program
             website = string.Empty,
             version = string.Empty,
             issetuprecipe = false, // #spell-check-ignore-line
-            categories = new JArray(),
-            tags = new JArray(),
+            categories = Enumerable.Empty<object>(),
+            tags = Enumerable.Empty<object>(),
             steps,
-        });
+        };
 
         // Creating JSON file.
-        using var file = File.CreateText(Path.Join(newDirectoryPath, RecipeFile));
-        using var writer = new JsonTextWriter(file) { Formatting = Formatting.Indented };
-        recipe.WriteTo(writer);
-
-        file.Close();
+        var recipePath = Path.Join(newDirectoryPath, RecipeFile);
+        var recipeBytes = JsonSerializer.SerializeToUtf8Bytes(recipe, recipe.GetType(), _indentedJsonSerializerOptions);
+        return File.WriteAllBytesAsync(recipePath, recipeBytes);
     }
 
     [GeneratedRegex(@"BaseTheme\s*=\s*""(?<baseThemeId>.*)""", RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]

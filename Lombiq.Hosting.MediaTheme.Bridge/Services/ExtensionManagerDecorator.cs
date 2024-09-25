@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public class ExtensionManagerDecorator : IExtensionManager
+public sealed class ExtensionManagerDecorator : IExtensionManager
 {
     private readonly IExtensionManager _decorated;
     private readonly IMediaThemeStateStore _mediaThemeStateStore;
@@ -68,13 +68,13 @@ public class ExtensionManagerDecorator : IExtensionManager
     public IEnumerable<IFeatureInfo> GetDependentFeatures(string featureId) =>
         _decorated.GetDependentFeatures(featureId);
 
-    public Task<IEnumerable<FeatureEntry>> LoadFeaturesAsync() =>
+    Task<IEnumerable<IFeatureInfo>> IExtensionManager.LoadFeaturesAsync() =>
         _decorated.LoadFeaturesAsync();
 
-    public Task<IEnumerable<FeatureEntry>> LoadFeaturesAsync(string[] featureIdsToLoad) =>
+    Task<IEnumerable<IFeatureInfo>> IExtensionManager.LoadFeaturesAsync(string[] featureIdsToLoad) =>
         _decorated.LoadFeaturesAsync(featureIdsToLoad);
 
     private string GetBaseThemeId() =>
-        // It'll be retrieved from cache so it's not an issue.
+        // It'll be retrieved from cache, so it's not an issue.
         _mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
 }

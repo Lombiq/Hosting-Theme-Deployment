@@ -27,21 +27,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="1.8.0" />
-    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="1.8.0" />
-    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="1.8.0" />
-    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="1.8.0" />
-    <PackageReference Include="OrchardCore.Media" Version="1.8.0" />
-    <PackageReference Include="OrchardCore.Module.Targets" Version="1.8.0" />
+    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="2.0.0" />
+    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="2.0.0" />
+    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="2.0.0" />
+    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="2.0.0" />
+    <PackageReference Include="OrchardCore.Media" Version="2.0.0" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.0.0" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(NuGetBuild)' != 'true'">
     <ProjectReference Include="..\..\..\Libraries\Lombiq.HelpfulLibraries\Lombiq.HelpfulLibraries.OrchardCore\Lombiq.HelpfulLibraries.OrchardCore.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Lombiq.HelpfulExtensions\Lombiq.HelpfulExtensions\Lombiq.HelpfulExtensions.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(NuGetBuild)' == 'true'">
-    <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="10.0.0" />
+    <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="11.0.0" />
+    <PackageReference Include="Lombiq.HelpfulExtensions" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

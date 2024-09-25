@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.Deployment;
 using OrchardCore.DisplayManagement;
-using OrchardCore.DisplayManagement.Handlers;
 using OrchardCore.Environment.Extensions;
 using OrchardCore.Modules;
 using OrchardCore.Navigation;
@@ -21,23 +20,21 @@ using System;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge;
 
-public class Startup : StartupBase
+public sealed class Startup : StartupBase
 {
-    // Make sure the middlewares run first so we can block Media Theme template requests in time.
-    public override int Order => -100;
+    // Make sure the middlewares run first, so we can block Media Theme template requests in time.
+    public override int ConfigureOrder => int.MinValue;
 
     public override void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<IPermissionProvider, MediaThemeDeploymentPermissions>();
-        services.AddScoped<INavigationProvider, MediaThemeDeploymentSettingsAdminMenu>();
+        services.AddPermissionProvider<MediaThemeDeploymentPermissions>();
+        services.AddNavigationProvider<MediaThemeDeploymentSettingsAdminMenu>();
         services.AddSingleton<IMediaThemeStateStore, MediaThemeStateStore>();
         services.Decorate<IExtensionManager, ExtensionManagerDecorator>();
         services.AddScoped<IShapeBindingResolver, MediaTemplatesShapeBindingResolver>();
         services.AddScoped<IMediaThemeManager, MediaThemeManager>();
         services.AddRecipeExecutionStep<MediaThemeStep>();
-        services.AddTransient<IDeploymentSource, MediaThemeDeploymentSource>();
-        services.AddSingleton<IDeploymentStepFactory>(new DeploymentStepFactory<MediaThemeDeploymentStep>());
-        services.AddScoped<IDisplayDriver<DeploymentStep>, MediaThemeDeploymentStepDriver>();
+        services.AddDeployment<MediaThemeDeploymentSource, MediaThemeDeploymentStep, MediaThemeDeploymentStepDriver>();
         services.AddScoped<IAuthorizationHandler, ManageMediaThemeFolderAuthorizationHandler>();
         services.AddScoped<IMediaThemeCachingService, MediaThemeCachingService>();
         services.AddOrchardServices();

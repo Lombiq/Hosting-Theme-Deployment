@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Permissions;
 
-public class MediaThemeDeploymentPermissions : IPermissionProvider
+public sealed class MediaThemeDeploymentPermissions : IPermissionProvider
 {
     public static readonly Permission ManageMediaTheme = new(
         nameof(ManageMediaTheme),

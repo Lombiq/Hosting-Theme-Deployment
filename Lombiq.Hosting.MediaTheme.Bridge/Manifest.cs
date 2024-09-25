@@ -1,3 +1,4 @@
+using Lombiq.HelpfulExtensions;
 using OrchardCore.Modules.Manifest;
 
 [assembly: Module(
@@ -7,5 +8,5 @@ using OrchardCore.Modules.Manifest;
     Version = "0.0.1",
     Description = "Provides the processing logic for the Media Theme.",
     Category = "Hosting",
-    Dependencies = ["OrchardCore.Deployment", "OrchardCore.Media"]
+    Dependencies = ["OrchardCore.Deployment", "OrchardCore.Media", FeatureIds.GoogleTag]
 )]
