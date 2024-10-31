@@ -36,7 +36,7 @@ on:
 jobs:
   deploy-media-theme:
     name: Deploy Media Theme
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: Lombiq/GitHub-Actions/.github/actions/checkout@dev
