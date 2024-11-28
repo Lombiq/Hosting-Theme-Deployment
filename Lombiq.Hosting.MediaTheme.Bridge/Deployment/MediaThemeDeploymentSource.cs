@@ -8,26 +8,21 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Deployment;
 
-public class MediaThemeDeploymentSource : IDeploymentSource
+public class MediaThemeDeploymentSource : DeploymentSourceBase<MediaThemeDeploymentStep>
 {
     private readonly IMediaThemeStateStore _mediaThemeStateStore;
 
     public MediaThemeDeploymentSource(IMediaThemeStateStore mediaThemeStateStore) =>
         _mediaThemeStateStore = mediaThemeStateStore;
 
-    public async Task ProcessDeploymentStepAsync(DeploymentStep step, DeploymentPlanResult result)
+    protected override async Task ProcessAsync(MediaThemeDeploymentStep step, DeploymentPlanResult result)
     {
-        if (step is not MediaThemeDeploymentStep mediaThemeStep)
-        {
-            return;
-        }
-
         var mediaThemeState = await _mediaThemeStateStore.GetMediaThemeStateAsync();
 
         result.Steps.Add(new JsonObject(new Dictionary<string, JsonNode>
         {
             ["name"] = RecipeStepIds.MediaTheme,
-            [nameof(MediaThemeDeploymentStep.ClearMediaThemeFolder)] = mediaThemeStep.ClearMediaThemeFolder,
+            [nameof(MediaThemeDeploymentStep.ClearMediaThemeFolder)] = step.ClearMediaThemeFolder,
             [nameof(MediaThemeStateDocument.BaseThemeId)] = mediaThemeState.BaseThemeId,
         }));
     }
