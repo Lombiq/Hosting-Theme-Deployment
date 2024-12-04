@@ -1,29 +1,12 @@
+using Lombiq.HelpfulLibraries.OrchardCore.Users;
 using OrchardCore.Security.Permissions;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Permissions;
 
-public sealed class MediaThemeDeploymentPermissions : IPermissionProvider
+public sealed class MediaThemeDeploymentPermissions : AdminPermissionBase
 {
-    public static readonly Permission ManageMediaTheme = new(
-        nameof(ManageMediaTheme),
-        "Manage Media Theme.");
+    public static readonly Permission ManageMediaTheme = new(nameof(ManageMediaTheme), "Manage Media Theme.");
 
-    public Task<IEnumerable<Permission>> GetPermissionsAsync() =>
-        Task.FromResult(new[]
-        {
-            ManageMediaTheme,
-        }
-        .AsEnumerable());
-
-    public IEnumerable<PermissionStereotype> GetDefaultStereotypes() =>
-        [
-            new PermissionStereotype
-            {
-                Name = "Administrator",
-                Permissions = [ManageMediaTheme],
-            },
-        ];
+    protected override IEnumerable<Permission> AdminPermissions => [ManageMediaTheme];
 }

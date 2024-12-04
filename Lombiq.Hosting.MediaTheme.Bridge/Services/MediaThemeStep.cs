@@ -3,13 +3,12 @@ using OrchardCore.FileStorage;
 using OrchardCore.Media;
 using OrchardCore.Recipes.Models;
 using OrchardCore.Recipes.Services;
-using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public sealed class MediaThemeStep : IRecipeStepHandler
+public sealed class MediaThemeStep : NamedRecipeStepHandler
 {
     private readonly IMediaFileStore _mediaFileStore;
     private readonly IMediaThemeManager _mediaThemeManager;
@@ -17,18 +16,14 @@ public sealed class MediaThemeStep : IRecipeStepHandler
     public MediaThemeStep(
         IMediaFileStore mediaFileStore,
         IMediaThemeManager mediaThemeManager)
+        : base(RecipeStepIds.MediaTheme)
     {
         _mediaFileStore = mediaFileStore;
         _mediaThemeManager = mediaThemeManager;
     }
 
-    public async Task ExecuteAsync(RecipeExecutionContext context)
+    protected override async Task HandleAsync(RecipeExecutionContext context)
     {
-        if (!string.Equals(context.Name, RecipeStepIds.MediaTheme, StringComparison.OrdinalIgnoreCase))
-        {
-            return;
-        }
-
         var model = context.Step.Deserialize<MediaThemeStepModel>();
 
         await _mediaThemeManager.UpdateBaseThemeAsync(model.BaseThemeId);
