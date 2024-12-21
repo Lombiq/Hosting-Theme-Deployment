@@ -1,13 +1,13 @@
-﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Lombiq.Hosting.MediaTheme.Tests.UI.Extensions;
 using Lombiq.Tests.UI.Extensions;
 using Lombiq.Tests.UI.Services;
 using OrchardCore.Media;
+using Shouldly;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Tests.UI.Extensions;
 
@@ -32,6 +32,6 @@ public static class TestCaseUITestContextExtensions
 
         var response = await client.GetAsync(templatesPageUri);
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 }
