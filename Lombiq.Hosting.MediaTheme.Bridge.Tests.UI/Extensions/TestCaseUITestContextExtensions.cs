@@ -30,7 +30,7 @@ public static class TestCaseUITestContextExtensions
         handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
         using var client = new HttpClient(handler);
 
-        var response = await client.GetAsync(templatesPageUri);
+        var response = await client.GetAsync(templatesPageUri, context.Configuration.TestCancellationToken);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
