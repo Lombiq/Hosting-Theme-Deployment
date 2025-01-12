@@ -33,7 +33,7 @@
     <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="2.1.0" />
     <PackageReference Include="OrchardCore.Media" Version="2.1.0" />
     <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.0" />
-    <PackageReference Include="Scrutor" Version="5.1.0" />
+    <PackageReference Include="Scrutor" Version="5.1.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(NuGetBuild)' != 'true'">
